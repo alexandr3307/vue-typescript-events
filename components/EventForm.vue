@@ -16,6 +16,7 @@
         <template v-else>Создать событие</template>
       </MyButton>
       <MyButton @click="returnForm">Отменить изменения</MyButton>
+      <MyButton @click="deleteEvent">Удалить событие</MyButton>
 
       <Close class="modal__close" @click="closeForm">Закрыть форму</Close>
     </div>
@@ -29,6 +30,7 @@
     const emit = defineEmits<{
       (e: 'update', value: string): void
       (e: 'close', value: string): void
+      (e: 'delete', value: string): void
     }>()
 
     type PropsType = { event: EventType }
@@ -52,6 +54,9 @@
       eventDescription.value = oldDataValue.value.description
       eventDate.value = oldDataValue.value.date
     }
+    function deleteEvent() {
+      emit('delete', props.event.id)
+    }
     async function handleSubmit() {
 
       if (!props.event) {
@@ -65,12 +70,14 @@
 <style lang="scss">
   .modal {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border-radius: 15px;
+    top: 0;
+    left: 0;
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     &__close {
       position: absolute;
       top: 10px;
@@ -80,8 +87,11 @@
   }
 
   .modal-content {
+    position: relative;
     text-align: center;
-
+    background-color: white;
+    padding: 35px 20px 20px 20px;
+    border-radius: 15px;
   }
   .event-form {
     display: flex;

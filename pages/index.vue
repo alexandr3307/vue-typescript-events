@@ -3,8 +3,8 @@
 </template>
 
 <script>
-  import EventForm from "../components/EventForm";
-  import EventList from "../components/EventList";
+    import EventForm from "../components/EventForm";
+    import EventList from "../components/EventList";
     export default {
         name: "Index",
         components: {

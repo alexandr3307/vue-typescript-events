@@ -14,7 +14,7 @@
     </div>
     <div v-else>Нет данных, {{ error }}</div>
   </div>
-  <EventForm v-if="formShow && user" @update="refreshList" :event="eventCard" @close="closeForm"></EventForm>
+  <EventForm v-if="formShow && user" @update="refreshList" :event="eventCard" @close="closeForm" @delete="deleteEvent" ></EventForm>
 </template>
 
 <script setup lang="ts">
@@ -28,8 +28,6 @@
     const eventCard = ref({})
     const formShow = ref(false)
     const { data, pending, error, refresh } = await useAsyncData('events', () => client.from('events').select('*').order('id', { ascending: true }) )
-
-
     const user = useSupabaseUser()
 
     function toggleForm() {
@@ -57,6 +55,11 @@
       router.push("/login");
     }
     function refreshList() {
+      closeForm()
+      refresh();
+    }
+    async function deleteEvent(id: number) {
+      await client.from('events').delete().eq('id', id)
       closeForm()
       refresh();
     }
